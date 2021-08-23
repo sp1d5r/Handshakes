@@ -10,6 +10,10 @@ if __name__=="__main__":
     hands = mp_hands.Hands()
     mpDraw = mp.solutions.drawing_utils
 
+    # Adding a frame rate
+    prev_time = 0
+    curr_time = 0
+
     while True:
         success, img = capture.read()
 
@@ -23,6 +27,17 @@ if __name__=="__main__":
         if results.multi_hand_landmarks:
             for hand in results.multi_hand_landmarks:
                 mpDraw.draw_landmarks(img, hand, mp_hands.HAND_CONNECTIONS)
+
+        curr_time = time.time()
+        fps = 1/(curr_time - prev_time)
+        prev_time = curr_time
+
+        cv2.putText(img, "the fps:" + str(int(fps)),
+                    (10,70),
+                    cv2.FONT_ITALIC,
+                    3,
+                    (255, 255, 0),
+                    2)
 
         cv2.imshow("Image", img)
         cv2.waitKey(1)
