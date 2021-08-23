@@ -26,6 +26,19 @@ if __name__=="__main__":
         # Extract out the information for the hands
         if results.multi_hand_landmarks:
             for hand in results.multi_hand_landmarks:
+                for id, lm in enumerate(hand.landmark):
+                    height, width, channel = img.shape
+                    center_x, center_y=int(lm.x*width), int(lm.y*height)
+                    if id == 0:
+                        cv2.putText(img, "z cords:" + str((lm.z)),
+                                (10, 70),
+                                cv2.FONT_ITALIC,
+                                3,
+                                (255, 255, 0),
+                                2)
+                        print(lm.z)
+                    cv2.circle(img, (center_x, center_y), 18, (255*lm.z*10,255*lm.z*10,255*lm.z*10), cv2.FILLED)
+                    cv2.putText(img, str(id), (center_x, center_y), cv2.FONT_ITALIC, 0.7, (0, 0, 0), 2)
                 mpDraw.draw_landmarks(img, hand, mp_hands.HAND_CONNECTIONS)
 
         curr_time = time.time()
